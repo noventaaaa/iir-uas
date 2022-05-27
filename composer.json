@@ -1,0 +1,18 @@
+{
+  "name": "alif/sastrawi",
+  "description": "Tugas IIR",
+  "type": "project",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "alif",
+      "email": "alifianfajarpratama@gmail.com"
+    }
+  ],
+  "require": {
+    "sastrawi/sastrawi": "1",
+    "wamania/php-stemmer": "^3.0",
+    "php-ai/php-ml": "0.7.0",
+    "markrogoyski/math-php": "2.*"
+  }
+}
