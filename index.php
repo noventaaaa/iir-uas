@@ -46,6 +46,8 @@
                 <?php
                 //ISIKAN CODE ANDA DISINI
 
+
+
                 use MathPHP\Statistics\Distance;
                 use Phpml\FeatureExtraction\TfIdfTransformer;
                 use Phpml\FeatureExtraction\TokenCountVectorizer;
@@ -55,6 +57,21 @@
 
                 require_once __DIR__ . '/vendor/autoload.php';
                 include_once('simple_html_dom.php');
+
+
+
+                $servername = "localhost";
+                $username = "root";
+                $password = "";
+                $dbname = "iir_uas";
+
+                // Create connection
+                $conn = new mysqli($servername, $username, $password, $dbname);
+
+                // Check connection
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);
+                }
 
                 $keyword = "";
                 if (isset($_GET['keyword'])) {
@@ -70,41 +87,15 @@
 
 
                 foreach ($html->find('div[class="gs_ri"]') as $index => $berita) {
-                    if ($index == 5) break;
-
-
+                    $stmt = $conn->prepare("INSERT INTO journals (title, link, cite, keyword) VALUES (?, ?, ?, ?)");
 
                     $title = $berita->find('a', 0)->innertext;
                     $link = $berita->find('a', 0)->href;
                     $cite = $berita->find('div[class="gs_fl"]', 0);
                     $cited = explode(" ",  $cite->find('a', 2)->innertext)[2];
 
-                    // $context = stream_context_create(array(
-                    //     'http' => array(
-                    //         'header' => array('User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; rv:2.2) Gecko/20110201'),
-                    //     ),
-                    // ));
-
-                    // $html_2 = file_get_html($link, false, $context);
-                    // try {
-                    //     foreach ($html_2->find('.surname', 0) as $test) {
-                    //         if (in_array("Content-Type: application/pdf", get_headers($url))) {
-                    //             break;
-                    //         }
-
-                    //         $check = gettype($test);
-                    //         // if ($check == )
-                    //         // $t = implode(" ", $test);
-                    //         // echo $index . " " . $check;
-                    //         echo $check;
-                    //         echo "<br>";
-                    //     }
-                    // } catch (\Throwable $th) {
-                    //     echo $th;
-                    //     echo "<br>";
-                    // }
-
-
+                    $stmt->bind_param("ssis", $title, $link, $cited, $keyword);
+                    $stmt->execute();
 
                     $news[] = array(
                         "title" => $title,
