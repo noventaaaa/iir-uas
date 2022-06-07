@@ -167,7 +167,22 @@
                         "cite" => $cited
                     );
                     // echo $title;
-
+                    
+                    //PERHITUNGAN SIMILARITAS EUCLIDEAN
+                    $i = 0;
+                    $jumTitle = count($title); 
+                    $jumAbstract = count($abstract);
+                    $euclidean = new Euclidean();
+                    for ($i=0; $i<$jumTitle-1; $i++)
+                    {
+                        $resultTitle = $euclidean->distance($title[$i], $title[$jumTitle-1]);
+                    }
+                    for ($i=0; $i<$jumAbstract-1; $i++)
+                    {
+                        $resultTitle = $euclidean->distance($abstract[$i], $abstract[$jumAbstract-1]);
+                    }
+                    
+                    
                     $stmt = $conn->prepare("INSERT INTO journals (title, link, cite, keyword, author, abstract) VALUES (?, ?, ?, ?, ?, ?)");
                     $stmt->bind_param("ssisss", $title, $link, $cited, $keyword, $authors, $abstract);
                     $stmt->execute();
